@@ -1,0 +1,21 @@
+# Batch script to configure MySQL datasource
+batch
+
+# Add the MySQL datasource
+/subsystem=datasources/data-source=MySQLDS:add(
+    jndi-name="java:jboss/datasources/MySQL-DS",
+    pool-name="MySQL",
+    enabled=true,
+    use-java-context=true,
+    statistics-enabled=false,
+    connection-url="jdbc:mysql://localhost:3306/teste-java?createDatabaseIfNotExist=true&serverTimezone=UTC",
+    driver-name="mysql",
+    user-name="root",
+    password="admin"
+)
+
+# Execute the batch commands
+run-batch
+
+# Reload the server configuration to apply changes (uncomment if needed)
+#reload
