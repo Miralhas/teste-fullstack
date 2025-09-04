@@ -19,10 +19,15 @@ public class Documento {
 	private Long id;
 
 	@Column(nullable = false)
+	@Enumerated(EnumType.STRING)
 	private DocumentoTipo tipo;
 
 	@Column(nullable = false)
 	private String numero;
+
+	@ManyToOne
+	@JoinColumn(name = "pessoa_id")
+	private Pessoa pessoa;
 
 	@Override
 	public final boolean equals(Object o) {

@@ -42,6 +42,10 @@ public class Endereco {
 	@Column(nullable = true)
 	private String complemento;
 
+	@ManyToOne
+	@JoinColumn(name = "pessoa_id")
+	private Pessoa pessoa;
+
 	@Override
 	public final boolean equals(Object o) {
 		if (this == o) return true;

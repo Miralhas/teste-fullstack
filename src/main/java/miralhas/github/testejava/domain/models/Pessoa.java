@@ -7,7 +7,9 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.proxy.HibernateProxy;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -28,8 +30,21 @@ public class Pessoa {
 	@Column(nullable = false)
 	private String email;
 
-	@Column(nullable = false)
-	private OffsetDateTime dataNascimento;
+	@Column(nullable = false, name = "data_nascimento")
+	private LocalDate dataNascimento;
+
+	@OneToMany(mappedBy = "pessoa", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@ToString.Exclude
+	private List<Endereco> enderecos = new ArrayList<>();
+
+	@OneToMany(mappedBy = "pessoa", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@ToString.Exclude
+	private List<Telefone> telefones = new ArrayList<>();
+
+	@OneToMany(mappedBy = "pessoa", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@ToString.Exclude
+	private List<Documento> documentos = new ArrayList<>();
+
 
 	@Override
 	public final boolean equals(Object o) {
