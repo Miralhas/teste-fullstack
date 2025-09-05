@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+>
+
+<h:panelGroup id="enderecos-container" class="field">
+    <div style="display: flex; justify-content: space-between; margin-block: 8px;">
+        <p:commandButton
+                action="#{pessoasView.addEndereco}"
+                update="@parent"
+                process="@this"
+                ajax="true"
+                style="max-width: 100px;"
+                icon="pi pi-plus"
+                styleClass="rounded-button ui-button-outlined"
+        />
+        <p:commandButton
+                action="#{pessoasView.removeEnderecoInput()}"
+                update="@parent"
+                process="@this"
+                ajax="true"
+                style="max-width: 100px;"
+                icon="pi pi-trash"
+                styleClass="rounded-button ui-button-danger ui-button-outlined"
+                disabled="#{pessoasView.enderecosInput.size() le 1}"
+        />
+    </div>
+    <ui:repeat value="#{pessoasView.enderecosInput}" var="endereco" varStatus="status">
+        <div class="field" style="margin-bottom: 16px; margin-top: 16px;">
+            <p:outputLabel value="Endereço #{status.index+1}"/>
+        </div>
+        <div class="field">
+            <p:outputLabel for="cep" styleClass="block">Cep</p:outputLabel>
+            <p:inputText id="cep" value="#{endereco.cep}" styleClass="block" required="true"/>
+        </div>
+        <div class="field" style="margin-top: 6px;">
+            <p:outputLabel for="estado" styleClass="block">Estado</p:outputLabel>
+            <p:inputText id="estado" value="#{endereco.estado}" styleClass="block" required="true"/>
+        </div>
+        <div class="field" style="margin-top: 6px;">
+            <p:outputLabel for="cidade" styleClass="block">Cidade</p:outputLabel>
+            <p:inputText id="cidade" value="#{endereco.cidade}" styleClass="block" required="true"/>
+        </div>
+        <div class="field" style="margin-top: 6px;">
+            <p:outputLabel for="bairro" styleClass="block">Bairro</p:outputLabel>
+            <p:inputText id="bairro" value="#{endereco.bairro}" styleClass="block" required="true"/>
+        </div>
+        <div class="field" style="margin-top: 6px;">
+            <p:outputLabel for="numero" styleClass="block">Número</p:outputLabel>
+            <p:inputText id="numero" value="#{endereco.numero}" styleClass="block" required="true"/>
+        </div>
+        <div class="field" style="margin-top: 6px;">
+            <p:outputLabel for="logradouro" styleClass="block">Logradouro</p:outputLabel>
+            <p:inputText id="logradouro" value="#{endereco.logradouro}" styleClass="block" required="true"/>
+        </div>
+        <div class="field" style="margin-top: 6px;">
+            <p:outputLabel for="complemento" styleClass="block">Complemento</p:outputLabel>
+            <p:inputText id="complemento" value="#{endereco.complemento}" styleClass="block"/>
+        </div>
+
+        <hr/>
+    </ui:repeat>
+</h:panelGroup>
+
+</html>

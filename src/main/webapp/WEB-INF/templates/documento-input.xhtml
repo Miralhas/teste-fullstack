@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+>
+
+
+<h:panelGroup id="documentos-container" class="field">
+    <div style="display: flex; justify-content: space-between; margin-block: 8px;">
+        <p:commandButton
+                action="#{pessoasView.addDocumento}"
+                update="@parent"
+                process="@this"
+                ajax="true"
+                style="max-width: 100px;"
+                icon="pi pi-plus"
+                styleClass="rounded-button ui-button-outlined"
+        />
+        <p:commandButton
+                action="#{pessoasView.removeDocumentoInput}"
+                update="@parent"
+                process="@this"
+                ajax="true"
+                style="max-width: 100px;"
+                icon="pi pi-trash"
+                styleClass="rounded-button ui-button-danger ui-button-outlined"
+                disabled="#{pessoasView.documentosInput.size() le 1}"
+        />
+    </div>
+    <ui:repeat value="#{pessoasView.documentosInput}" var="doc" varStatus="status">
+        <div style="display: flex; justify-content: space-between">
+            <p:inputText
+                    value="#{pessoasView.documentosInput[status.index].numero}"
+                    placeholder="Digite o número do documento"
+                    required="true"
+            />
+            <p:selectOneMenu id="tipo-documento" value="#{doc.tipo}">
+                <f:selectItems
+                        value="#{doc.tipo.values()}"
+                        var="tipoDocumento"
+                        itemLabel="#{tipoDocumento.name()}"
+                        itemValue="#{tipoDocumento}"
+                />
+            </p:selectOneMenu>
+        </div>
+    </ui:repeat>
+</h:panelGroup>
+
+</html>
