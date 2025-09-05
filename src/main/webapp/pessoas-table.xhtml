@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+>
+<h:head>
+    <title>Pessoas</title>
+</h:head>
+
+<h:body>
+    <section>
+        <div style="width: 100%; max-width: 800px; margin-left: auto; margin-right: auto; display: flex; flex-direction: column; gap: 10px">
+            <h1 style="text-align: center">Tabela Pessoas</h1>
+            <h:form id="tabela">
+                <p:growl id="messages" showDetail="true" />
+                <p:toolbar>
+                    <p:toolbarGroup>
+                        <p:commandButton
+                                value="New" icon="pi pi-plus"
+                                styleClass="ui-button-success"
+                                style="margin-right: .5rem"
+                                onclick="PF('pessoaDialogWidgetVar').show()"
+                                actionListener="#{pessoasView.novaPessoa}"
+                                update=":dialogs:manage-pessoa"
+                        >
+                        </p:commandButton>
+                    </p:toolbarGroup>
+                </p:toolbar>
+
+                <p:dataTable
+                        value="#{pessoasView.pessoaService.findAllPessoas()}"
+                        var="p"
+                        paginator="true"
+                        rows="10"
+                        paginatorPosition="bottom"
+                        id="tabela-pessoas"
+                >
+                    <p:column headerText="Nome">
+                        <h:outputText value="#{p.nome}"/>
+                    </p:column>
+                    <p:column headerText="Email">
+                        <h:outputText value="#{p.email}"/>
+                    </p:column>
+                    <p:column headerText="Nascimento" style="text-align: center">
+                        <h:outputText value="#{p.dataNascimento}"/>
+                    </p:column>
+                    <p:column exportable="false" ariaHeaderText="Actions" style="text-align: end">
+                        <p:commandButton
+                                icon="pi pi-pencil"
+                                styleClass="rounded-button"
+                                process="@this"
+                                actionListener="#{pessoasView.editPessoa(p)}"
+                                onclick="PF('pessoaDialogWidgetVar').show()"
+                                update=":dialogs:manage-pessoa"
+                                style="margin-right: 6px;"
+                        >
+                            <f:setPropertyActionListener value="#{p}" target="#{pessoasView.pessoa}"/>
+                            <p:resetInput target=":dialogs:manage-pessoa"/>
+                        </p:commandButton>
+                        <p:commandButton
+                                class="ui-button-danger rounded-button" icon="pi pi-trash"
+                                actionListener="#{pessoasView.deletePessoa(p)}"
+                                process="@this"
+                                update="@form"
+                        >
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+
+            </h:form>
+            <h:form id="dialogs">
+                <p:dialog
+                        header="Nova Pessoa"
+                        widgetVar="pessoaDialogWidgetVar"
+                        showEffect="fade"
+                        modal="true"
+                        closeOnEscape="true"
+                        style="max-width: 800px; max-height: 600px; overflow-y: auto; width: 100%;"
+                >
+                    <p:outputPanel id="manage-pessoa" class="ui-fluid" style="display: grid; gap: 16px;">
+                        <div class="field">
+                            <p:outputLabel for="name">Name</p:outputLabel>
+                            <p:inputText id="name" value="#{pessoasView.pessoa.nome}" required="true"/>
+                        </div>
+                        <div class="field">
+                            <p:outputLabel for="email">Email</p:outputLabel>
+                            <p:inputText id="email" type="email"  value="#{pessoasView.pessoa.email}" required="true"/>
+                        </div>
+                        <div class="field">
+                            <p:outputLabel for="day-of-birth">Data de Nascimento</p:outputLabel>
+                            <p:datePicker
+                                    id="day-of-birth"
+                                    value="#{pessoasView.pessoa.dataNascimento}"
+                                    pattern="dd/MM/yyyy"
+                                    showIcon="true"
+                                    required="true"
+                                    yearNavigator="true"
+                                    monthNavigator="true"
+                                    yearRange="1900:2025"
+                            />
+                        </div>
+
+
+                        <p:accordionPanel widgetVar="basic" scrollIntoView="center">
+                            <p:tab title="Telefones">
+                                <ui:insert name="telefone-input">
+                                    <ui:include src="./WEB-INF/templates/telefone-input.xhtml"/>
+                                </ui:insert>
+                            </p:tab>
+                            <p:tab title="Documentos">
+                                <ui:insert name="documento-input">
+                                    <ui:include src="./WEB-INF/templates/documento-input.xhtml"/>
+                                </ui:insert>
+                            </p:tab>
+                            <p:tab title="Endereços">
+                                <ui:insert name="endereco-input">
+                                    <ui:include src="./WEB-INF/templates/endereco-input.xhtml"/>
+                                </ui:insert>
+                            </p:tab>
+                        </p:accordionPanel>
+
+                    </p:outputPanel>
+
+                    <f:facet name="footer">
+                        <p:commandButton
+                                value="Submit"
+                                actionListener="#{pessoasView.submit}"
+                                update=":dialogs:manage-pessoa"
+                                process=":dialogs:manage-pessoa @this"
+                        />
+                    </f:facet>
+                </p:dialog>
+            </h:form>
+        </div>
+    </section>
+</h:body>
+</html>
