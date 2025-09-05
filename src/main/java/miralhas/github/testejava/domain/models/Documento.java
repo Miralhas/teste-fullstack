@@ -20,13 +20,14 @@ public class Documento {
 
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
-	private DocumentoTipo tipo;
+	private DocumentoTipo tipo = DocumentoTipo.RG;
 
 	@Column(nullable = false)
 	private String numero;
 
 	@ManyToOne
 	@JoinColumn(name = "pessoa_id")
+	@ToString.Exclude
 	private Pessoa pessoa;
 
 	@Override

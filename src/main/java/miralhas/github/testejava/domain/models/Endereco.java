@@ -43,6 +43,7 @@ public class Endereco {
 	private String complemento;
 
 	@ManyToOne
+	@ToString.Exclude
 	@JoinColumn(name = "pessoa_id")
 	private Pessoa pessoa;
 

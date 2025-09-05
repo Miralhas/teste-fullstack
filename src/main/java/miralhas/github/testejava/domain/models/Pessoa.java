@@ -1,6 +1,7 @@
 package miralhas.github.testejava.domain.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -27,22 +28,20 @@ public class Pessoa {
 	@Column(nullable = false)
 	private String nome;
 
+	@Email
 	@Column(nullable = false)
 	private String email;
 
 	@Column(nullable = false, name = "data_nascimento")
 	private LocalDate dataNascimento;
 
-	@OneToMany(mappedBy = "pessoa", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@ToString.Exclude
+	@OneToMany(mappedBy = "pessoa", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Endereco> enderecos = new ArrayList<>();
 
-	@OneToMany(mappedBy = "pessoa", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@ToString.Exclude
+	@OneToMany(mappedBy = "pessoa", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Telefone> telefones = new ArrayList<>();
 
-	@OneToMany(mappedBy = "pessoa", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@ToString.Exclude
+	@OneToMany(mappedBy = "pessoa", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Documento> documentos = new ArrayList<>();
 
 

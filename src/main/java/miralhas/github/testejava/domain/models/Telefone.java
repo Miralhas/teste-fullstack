@@ -21,7 +21,7 @@ public class Telefone {
 
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
-	private TelefoneTipo tipo;
+	private TelefoneTipo tipo = TelefoneTipo.CELULAR;
 
 	@Column(nullable = false)
 	private String ddd;
@@ -30,9 +30,9 @@ public class Telefone {
 	private String numero;
 
 	@ManyToOne
+	@ToString.Exclude
 	@JoinColumn(name = "pessoa_id")
 	private Pessoa pessoa;
-
 
 	@Override
 	public final boolean equals(Object o) {
