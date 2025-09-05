@@ -1,21 +1,31 @@
-# Batch script to configure MySQL datasource
-batch
+embed-server --server-config=standalone.xml
 
-# Add the MySQL datasource
-/subsystem=datasources/data-source=MySQLDS:add(
-    jndi-name="java:jboss/datasources/MySQL-DS",
-    pool-name="MySQL",
-    enabled=true,
-    use-java-context=true,
-    statistics-enabled=false,
-    connection-url="jdbc:mysql://localhost:3306/teste-java?createDatabaseIfNotExist=true&serverTimezone=UTC",
-    driver-name="mysql",
-    user-name="root",
-    password="admin"
-)
+# 1) Adiciona o módulo do MySQL
+module add --name=com.mysql \
+           --resources=${mysql.connectorj.path} \
+           --dependencies=jakarta.api,java.logging
 
-# Execute the batch commands
-run-batch
+# 2) Registra o driver JDBC
+/subsystem=datasources/jdbc-driver=mysql:add( \
+    driver-name=mysql, \
+    driver-module-name=com.mysql, \
+    driver-class-name=com.mysql.cj.jdbc.Driver)
 
-# Reload the server configuration to apply changes (uncomment if needed)
-#reload
+# 3) Cria o datasource "teste-fullstack"
+/subsystem=datasources/data-source=teste-fullstack:add( \
+    jndi-name=java:/teste-fullstack, \
+    driver-name=mysql, \
+    connection-url="jdbc:mysql://localhost:3306/teste-fullstack?createDatabaseIfNotExist=true&serverTimezone=UTC", \
+    user-name=${mysql.username}, \
+    password=${mysql.password}, \
+    min-pool-size=5, \
+    max-pool-size=15, \
+    valid-connection-checker-class-name=org.jboss.jca.adapters.jdbc.extensions.mysql.MySQLValidConnectionChecker, \
+    exception-sorter-class-name=org.jboss.jca.adapters.jdbc.extensions.mysql.MySQLExceptionSorter, \
+    validate-on-match=true, \
+    enabled=true)
+
+# 4) Testa a conexão
+/subsystem=datasources/data-source=teste-fullstack:test-connection-in-pool
+
+stop-embedded-server
